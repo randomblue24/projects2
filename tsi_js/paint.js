@@ -2,12 +2,12 @@
 const prompt = require("prompt-sync")();
 
 //function to get paint price
-function getPaint(text){
-    let white=20;
-    let black=25;
-    let blue=30;
-    let red=35;
-    let green=40;
+function paintPrice(text){
+    const white=20;
+    const black=25;
+    const blue=30;
+    const red=35;
+    const green=40;
   
     //using switch case to return correct price
     switch (text) {
@@ -26,12 +26,31 @@ function getPaint(text){
     }
 }
 
-function getInput() {
+function getPaint() {
     //note, input is a function in js
-    let input = prompt("Enter a number:");
+    let input = prompt("What color paint do you want, red, green, blue, white or black? ");
+
+    /*while (input!=="red" &&  input!=="green" && input!=="blue" && input!=="white" && input!=="black") {
+        input=prompt("Invalid choice, please enter red, green, blue, white or black: ".toLowerCase());
+    } */
+    if(input!=="red"){
+        input=prompt("Invalid choice,: ".toLowerCase());
+    }
+    
+
     return input;
+
 }
 
-console.log(getInput());
+
+function customerChoice(){
+    let color= getPaint();
+    let price= paintPrice(color);
+
+    console.log("You've chosen: " + color + "which costs: $" + price);
+
+}
+
+customerChoice();
 
 
