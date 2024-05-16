@@ -28,29 +28,71 @@ function paintPrice(text){
 
 function getPaint() {
     //note, input is a function in js
-    let input = prompt("What color paint do you want, red, green, blue, white or black? ");
-
-    /*while (input!=="red" &&  input!=="green" && input!=="blue" && input!=="white" && input!=="black") {
-        input=prompt("Invalid choice, please enter red, green, blue, white or black: ".toLowerCase());
-    } */
-    if(input!=="red"){
-        input=prompt("Invalid choice,: ".toLowerCase());
+    console.log("White: $20 /liter, \nBlack: $25 /liter \nBlue: $30 /liter \nRed: $35 /liter \nGreen: $40 /liter");
+    let input = prompt("Please choose paint: ").toLowerCase();
+    //while loop to ensure correct input and stop users from entering invalid inputs
+    while (input!=="red" &&  input!=="green" && input!=="blue" && input!=="white" && input!=="black") {
+        input=prompt("Invalid choice, Please choose again: ".toLowerCase());
     }
-    
-
     return input;
 
 }
 
+//function to get the price and liters of paint needed
+function paintAmount(priceperliter, measurement){
+    //1 liter = 100 square feet
+    let liter_cover=100;
+        
+    //total number of liters = total fquare foot / 100 square feet per liter. We round up using math.ceil
+    let total_liters=Math.ceil(measurement/liter_cover);
 
-function customerChoice(){
-    let color= getPaint();
-    let price= paintPrice(color);
+    let total_price = total_liters * priceperliter;
 
-    console.log("You've chosen: " + color + "which costs: $" + price);
+    if(measurement<100){
+        total_liters=1;
+        total_price = priceperliter;
+    }
 
+    //can't return two values at once, 
+    //so we need to return it as a object, whill will be tricky to work with
+    return {
+        total_price:total_price, total_liters:total_liters 
+    }
 }
 
-customerChoice();
+
+function customerChoice(color, price){
+
+    //this capitalizes the first letter of the color. 
+    //Takes 1st char of string and capitalizes it. 
+    //slice(1) removes the original 1st char of string using slice(1) 
+    //we add the capizalized char to the string and concatenate them
+    console.log("You've chosen: " + color.charAt(0).toUpperCase()+ color.slice(1)+ " $" + price + " /liter"
+    );
+}
+
+
+function main(){
+    console.log("Welcome to Paint Store. Here are your options:");
+
+    let color=getPaint();
+    let price=paintPrice(color);
+    
+    //tell the customer what they chose
+    customerChoice(color, price);
+
+    //get the amount of paint needed
+    let measurement=prompt("How many square feet of paint do you need? ");
+
+    //this doen't work because it's returning an object, and need to access the values as well. So how?
+    //let total_price, total_liters=paintAmount(price, measurement);
+
+    let total_price=paintAmount(price, measurement).total_price;
+    let total_liters=paintAmount(price, measurement).total_liters;
+
+    console.log ("Your total is $" + total_price + " for " + total_liters + " liters of " + color + " paint");
+
+main();
+
 
 
