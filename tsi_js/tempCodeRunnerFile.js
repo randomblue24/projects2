@@ -7,18 +7,34 @@ function paintPrice(paintType, color) {
     const regularPaint = {"white": 20, "black": 25, "blue": 30, "red": 35, "green": 40 };
     const premiumPaint= {"white": 25, "black": 30, "blue": 35, "red": 40, "green": 45};
 
-    /* Tests
-    console.log("test")
-    console.log(regularPaint["white"]);
-    console.log(typeof( regularPaint["white"]))
-    */
-
-    if (paintType === "regular") {
-        return regularPaint[color];
-    } else if (paintType === "premium") {
-        return premiumPaint[color];
-    } else {
-        return undefined;
+    //using switch case to return correct price
+    switch (paintType=="regular") {
+        case "white":
+            return regularPaint["white"];
+        case "blue":
+            return regularPaint["blue"];
+        case "green":
+            return regularPaint["green"];
+        case "red":
+            return regularPaint["red"];
+        case "black":
+            return regularPaint["black"];
+        default:
+            return;
+    }
+    switch (paintType=="premium") {
+        case "white":
+            return regularPaint["white"];
+        case "blue":
+            return regularPaint["blue"];
+        case "green":
+            return regularPaint["green"];
+        case "red":
+            return regularPaint["red"];
+        case "black":
+            return regularPaint["black"];
+        default:
+            return;
     }
 }
 
@@ -171,12 +187,7 @@ function main(){
     const color=paint.paintColor;
 
     const price=paintPrice(paintType, color);
-
-    /*Tests
-    console.log("test2")
-    console.log(color)
-    console.log(price)
-    */
+    
     //tell the customer what they chose
     customerChoice(color, price);
 
