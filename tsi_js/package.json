@@ -1,0 +1,12 @@
+{
+    "name": "Paint",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "jest",
+      "start": "node paint.test.js"
+    }
+
+  }
+  
