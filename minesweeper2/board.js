@@ -6,6 +6,8 @@ class GameBoard {
     constructor(size, numMines) {
         this.size = size;
         this.numMines = numMines;
+        //track # of revealed cells
+        this.revealedCells = 0;
         //the board which is a 2d array, initialized with 0s
         this.board = this.initializeBoard(size);
         //trackboard which is a 2d array, initialized with false, tracks the board
@@ -82,7 +84,7 @@ class GameBoard {
                     for (let j = -1; j <= 1; j++) {
                         //If we're on teh current cell then we skip the current cell
                         if (i === 0 && j === 0) {
-                            continue; 
+                            continue;
                         }
                         let newY = y + i;
                         let newX = x + j;
@@ -114,6 +116,8 @@ class GameBoard {
             }
             //sets the current coordinate to show the cell was visited
             this.trackBoard[currentY][currentX] = true;
+            //track # of revealed cells
+            this.revealedCells++;
 
             // If the cell is a 0, shhow all adjacent cells w/o mines
             if (this.board[currentY][currentX] === 0) {
@@ -153,75 +157,83 @@ class GameBoard {
             //if it's not a game over we show the cell 
             //and check for adjacent cells
             this.showAdjacent(y, x);
+            if (this.revealedCells === this.size * this.size - this.numMines) {
+                console.log('Congratulations! You won!');
+                //show entire board
+                this.printBoard(true); 
+                process.exit();
+            }
+            /*
+            if((this.trackBoard) === this.numberInCells()) {
+                console.log('You won!');
+                this.printBoard(true);
+                process.exit();
+            }*/
         }
-        /*
-        if((this.trackBoard) === this.numberInCells()) {
-            console.log('You won!');
-            this.printBoard(true);
-            process.exit();
-        }*/
     }
+        //function to display the entire sweeper board
+        //If showall is true then we show the board by looping through the 2d array
+        //If its false, cover board with asterisks
+        printBoard(showAll = false) {
 
-    //function to display the entire sweeper board
-    //If showall is true then we show the board by looping through the 2d array
-    //If its false, cover board with asterisks
-    printBoard(showAll = false) {
+            // print horizontal coordinate scale 1st
+            let horizontalScale = '';
+            for (let i = 0; i < this.size; i++) {
+                horizontalScale += ' ' + (i + 1).toString().padStart(2, '') + '';
+            }
+            console.log(horizontalScale);
 
-        // print horizontal coordinate scale 1st
-        let horizontalScale = '';
-        for (let i = 0; i < this.size; i++) {
-            horizontalScale += ' '+(i + 1).toString().padStart(2, '') + '';
-        }
-        console.log(horizontalScale);
-
-        // Print the board with vertical coordinate scale
-        for (let y = 0; y < this.size; y++) {
-            let row = (y+1).toString().padStart(0, ' ') + ' ';
-            //if showall is true or the trackboard is true then print the entire board board
-            for (let x = 0; x < this.size; x++) {
-                if (showAll || this.trackBoard[y][x]) {
-                    row += this.board[y][x] + ' ';
-                } else {
-                    row += '* ';
+            // Print the board with vertical coordinate scale
+            for (let y = 0; y < this.size; y++) {
+                let row = (y + 1).toString().padStart(0, ' ') + ' ';
+                //if showall is true or the trackboard is true then print the entire board board
+                for (let x = 0; x < this.size; x++) {
+                    if (showAll || this.trackBoard[y][x]) {
+                        row += this.board[y][x] + ' ';
+                    } else {
+                        row += '* ';
+                    }
                 }
+                console.log(row);
             }
-            console.log(row);
         }
-    }
 
-    // play function to start the game
-    play() {
-        //print the board 1st
-        this.printBoard();
-
-        // loop to get user input
-        //so we want to get the user input and then check against it if its valid
-        //if its valid we want to check if it's a mine or not and show it
-        while (true) {
-            let input = prompt('Enter coordinates (row,col): ');
-
-            //here we use the spit function to split the input into array of substrings based on comma
-            //we then use map functon to convert e/ lement in string array into #
-            let [y, x] = input.split(',').map(Number);
-            //if the user doens't enter a nmber or enters a # that's bigger than gameboard size we do an error message
-            if (isNaN(y) || isNaN(x) || y < 0 || y >= this.size + 1 || x < 0 || x >= this.size + 1) {
-                console.log('Invalid coordinates. Please try again.');
-            } else {
-                //if the user enters a number we show it
-                //subtract 1 because arrays start from 0, and user input starts from 1
-                this.showCell(y - 1, x - 1);
-            }
+        // play function to start the game
+        play() {
+            //print the board 1st
             this.printBoard();
-        }
-    }
 
-}
+            // loop to get user input
+            //so we want to get the user input and then check against it if its valid
+            //if its valid we want to check if it's a mine or not and show it
+            while (true) {
+                let input = prompt('Enter coordinates (row,col): ');
+
+                //here we use the spit function to split the input into array of substrings based on comma
+                //we then use map functon to convert e/ lement in string array into #
+                let [y, x] = input.split(',').map(Number);
+                //if the user doens't enter a nmber or enters a # that's bigger than gameboard size we do an error message
+                if (isNaN(y) || isNaN(x) || y < 0 || y >= this.size + 1 || x < 0 || x >= this.size + 1) {
+                    console.log('Invalid coordinates. Please try again.');
+                } else {
+                    //if the user enters a number we show it
+                    //subtract 1 because arrays start from 0, and user input starts from 1
+                    this.showCell(y - 1, x - 1);
+                }
+                this.printBoard();
+            }
+        }
+
+    }
 
 
 //size of board
-let size = 8;
+//let size = 2;
+let size = 3;
 //number of mines
-let numMines = 10;
+//let numMines = 0;
+let numMines = 1;
+
 //initializing the gameboard
 let game = new GameBoard(size, numMines);
 game.play();
